@@ -1,12 +1,13 @@
 import React from 'react';
 
-const Rank = () => {
+const Rank = ({name, entries}) => {
     return (
-        <div>
+        <React.Fragment>
             <div className = 'white f3'>
-                {'Oz, your current rank is  .. #1'}
+                {`${name}, your upload count is:`}
+                <div className = 'white f1'> {entries} </div>
             </div>
-        </div>
+        </React.Fragment>
     );
 }
 
