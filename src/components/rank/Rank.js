@@ -4,8 +4,7 @@ const Rank = ({name, entries}) => {
     return (
         <React.Fragment>
             <div className = 'white f3'>
-                {`${name}, your upload count is:`}
-                <div className = 'white f1'> {entries} </div>
+                {`${name}, you have uploaded ${entries} images!`}
             </div>
         </React.Fragment>
     );
