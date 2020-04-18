@@ -6,7 +6,8 @@ class Register extends Component {
         this.state = {
             email: '',
             password: '',
-            name: ''
+            name: '',
+            errors: ''
         }
     }
 
@@ -23,23 +24,36 @@ class Register extends Component {
     }
 
     onSubmitSignIn = () => {
-        fetch('https://peaceful-temple-52286.herokuapp.com/register', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password,
-                name: this.state.name
+        const {email, password, name} = this.state;
+        let re = /\S+@\S+\.\S+/;
+        console.log(!re.test(email));
+        if (!re.test(email)) {
+            this.setState({errors: 'email format is incorrect'});
+        }
+        else if (password.length < 3) {
+            this.setState({errors: 'password\'s length can\'t be less than 3'});
+        } else if (name.length < 2) {
+            this.setState({errors: 'name\'s length can\'t be less than 2'});
+        } else {
+            this.setState({errors: ''});
+            fetch('https://peaceful-temple-52286.herokuapp.com/register', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    name: name
+                })
             })
-        })
-            .then(response => response.json())
-            .then(user => {
-                if (user.id) {
-                    this.props.loadUser(user);
-                    this.props.onRouteChange('home')
-                }
-            })
-            .catch(err => console.log("Error registering "));
+                .then(response => response.json())
+                .then(user => {
+                    if (user.id) {
+                        this.props.loadUser(user);
+                        this.props.onRouteChange('home')
+                    }
+                })
+                .catch(err => console.log("Error registering "));
+        }
     }
 
     render() {
@@ -80,6 +94,9 @@ class Register extends Component {
                                 />
                             </div>
                         </fieldset>
+                        <span className = 'db ma0 pb2 dark-red'>
+                            {this.state.errors}
+                        </span>
                         <div className="">
                             <input
                                 onClick={this.onSubmitSignIn}

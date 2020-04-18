@@ -5,7 +5,8 @@ class SignIn extends Component {
         super(props);
         this.state = {
             signInEmail: '',
-            signInPassword: ''
+            signInPassword: '',
+            errors: ''
         }
     }
 
@@ -18,12 +19,13 @@ class SignIn extends Component {
     }
 
     onSubmitSignIn = () => {
+        const {signInEmail, signInPassword} = this.state; 
         fetch('https://peaceful-temple-52286.herokuapp.com/signin', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                email: this.state.signInEmail,
-                password: this.state.signInPassword
+                email: signInEmail,
+                password: signInPassword
             })
         })
             .then(response => response.json())
@@ -31,6 +33,8 @@ class SignIn extends Component {
                 if (user.id) {
                     this.props.loadUser(user);
                     this.props.onRouteChange('home')
+                } else {
+                    this.setState({errors: user});
                 }
             })
             .catch(err => console.log("Error signing in"));
@@ -65,7 +69,10 @@ class SignIn extends Component {
                                 />
                             </div>
                         </fieldset>
-                        <div className="">
+                        <span className = 'db ma0 pb2 dark-red'>
+                            {this.state.errors}
+                        </span>
+                        <div>
                             <input
                                 onClick={this.onSubmitSignIn}
                                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
