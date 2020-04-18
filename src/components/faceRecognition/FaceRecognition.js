@@ -10,7 +10,7 @@ const FaceRecognition = ({ box, imageUrl, faceUrl }) => {
                         {box.map((face, index) =>
                             <div
                                 key={index++}
-                                className='bounding-box'
+                                className= {['bounding-box',faceUrl === '' ? 'border' : null].join(' ')}
                                 style={{ top: face.topRow, right: face.rightCol, bottom: face.bottomRow, left: face.leftCol }}
                             >
                                 <img id='face' alt='' src={faceUrl} />

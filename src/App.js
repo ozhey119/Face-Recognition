@@ -83,12 +83,10 @@ class App extends Component {
     }
 
     onInputChange = (event) => {
-        console.log(event.target.value);
         this.setState({ input: event.target.value });
     }
 
     onFaceChange = (event) => {
-        console.log(event.target.value);
         this.setState({ faceUrl: event.target.value });
     }
 
