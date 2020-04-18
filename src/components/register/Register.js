@@ -50,6 +50,8 @@ class Register extends Component {
                     if (user.id) {
                         this.props.loadUser(user);
                         this.props.onRouteChange('home')
+                    } else {
+                        this.setState({errors: 'unable to register. the email address entered might already exist'});
                     }
                 })
                 .catch(err => console.log("Error registering "));

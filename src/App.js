@@ -24,6 +24,7 @@ const particlesOptions = {
 const initialState = {
     input: '',
     imageUrl: '',
+    faceUrl : '',
     box: [{}],
     route: 'signin',
     isSignedIn: false,
@@ -42,6 +43,7 @@ class App extends Component {
         this.state = {
             input: '',
             imageUrl: '',
+            faceUrl: '',
             box: [{}],
             route: 'signin',
             isSignedIn: false,
@@ -81,10 +83,16 @@ class App extends Component {
     }
 
     onInputChange = (event) => {
+        console.log(event.target.value);
         this.setState({ input: event.target.value });
     }
 
-    onButtonSubmit = () => {
+    onFaceChange = (event) => {
+        console.log(event.target.value);
+        this.setState({ faceUrl: event.target.value });
+    }
+
+    onImageSubmit = () => {
         this.setState({ imageUrl: this.state.input }, () => {
             fetch('https://peaceful-temple-52286.herokuapp.com/imageurl', {
                 method: 'post',
@@ -114,10 +122,9 @@ class App extends Component {
                     let facesArr = response.outputs[0].data.regions.map(() => {
                         return this.calculateFaceLocation(response, i++)
                     })
-                    return this.setState({ box: facesArr}, () => {
-                    });
+                    return this.setState({ box: facesArr });
                 }).catch(err => {
-                    console.log(`error: ${this.state.input}error: ${err}`);
+                    console.log(`input: ${this.state.input} error: ${err}`);
                 })
         }
         );
@@ -130,11 +137,10 @@ class App extends Component {
             this.setState({ isSignedIn: true });
         }
         this.setState({ route: route });
-
     }
 
     render() {
-        const { isSignedIn, imageUrl, route, box, user } = this.state;
+        const { isSignedIn, imageUrl, route, box, user, faceUrl } = this.state;
         return (
             <div className="App">
                 <Particles className='particles'
@@ -146,9 +152,10 @@ class App extends Component {
                         <Rank name={user.name} entries={user.entries} />
                         <ImageLinkForm
                             onInputChange={this.onInputChange}
-                            onButtonSubmit={this.onButtonSubmit} />
+                            onFaceChange = {this.onFaceChange}
+                            onImageSubmit={this.onImageSubmit} />
                         <div>
-                        <FaceRecognition box={box} imageUrl={imageUrl}/>
+                            <FaceRecognition box={box} imageUrl={imageUrl} faceUrl = {faceUrl} />
                         </div>
                     </div>
                     : (route !== 'register')
